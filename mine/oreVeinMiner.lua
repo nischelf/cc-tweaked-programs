@@ -1,3 +1,25 @@
+local function fileExists(name)
+	local f, error = io.open(name, "r")
+	if error then
+		print(error)
+	end
+	if f then
+		f:close()
+		return true
+	else
+		return false
+	end
+end
+
+local customOresFile = "/mine/customOres.lua"
+local customOres = nil
+-- imports
+if fileExists(customOresFile) then
+	local module_name = customOresFile:gsub("%.lua$", "")
+	customOres = require(module_name)
+else
+	print("no custom ores")
+end
 -- get values
 -- get depth
 io.write("Enter mine down x depth: ")
@@ -15,7 +37,7 @@ if tLength <= 0 then
 	print("positive length!")
 end
 
--- List of ores to mine
+-- Base list of ores to mine
 local ores = {
 	"minecraft:iron_ore",
 	"minecraft:gold_ore",
@@ -25,9 +47,16 @@ local ores = {
 	"minecraft:emerald_ore",
 	"minecraft:lapis_ore",
 	"minecraft:nether_quartz_ore",
-	"minecraft:deepslate_iron_ore", -- add other ores as needed
-	"buddycards:luminis_ore",
+	"minecraft:deepslate_iron_ore",
 }
+
+-- add custom ores to ores to mine
+if customOres ~= nil then
+	for _, value in ipairs(customOres) do
+		table.insert(ores, value)
+	end
+end
+-- print(textutils.serialise(ores))
 
 -- Function to check if the block is an ore
 function isOre(block)
