@@ -1,11 +1,18 @@
--- get Args
-io.write("Enter Mining depth: ")
+-- get values
+-- get depth
+io.write("Enter mine down x depth: ")
 local tDepth = tonumber(io.read())
+
+if tDepth <= 0 then
+	print("positive number for depth!")
+end
+
+-- get length
 io.write("Enter Tunnel length: ")
 local tLength = tonumber(io.read())
 
 if tLength <= 0 then
-	print("positive length")
+	print("positive length!")
 end
 
 -- List of ores to mine
@@ -42,7 +49,9 @@ function mineVein()
 		local success, block = turtle.inspect()
 
 		if success and isOre(block) then
-			turtle.dig()
+			while turtle.detect() do
+				turtle.dig()
+			end
 			turtle.forward()
 			mineVein() -- Recursively mine in the new position
 			turtle.back()
@@ -54,7 +63,9 @@ function mineVein()
 		local success, block = turtle.inspectUp()
 
 		if success and isOre(block) then
-			turtle.digUp()
+			while turtle.detectUp() do
+				turtle.digUp()
+			end
 			turtle.up()
 			mineVein() -- Recursively mine in the new position
 			turtle.down()
@@ -66,7 +77,9 @@ function mineVein()
 		local success, block = turtle.inspectDown()
 
 		if success and isOre(block) then
-			turtle.digDown()
+			while turtle.detectDown() do
+				turtle.digDown()
+			end
 			turtle.down()
 			mineVein() -- Recursively mine in the new position
 			turtle.up()
@@ -79,7 +92,9 @@ function mineVein()
 		if turtle.detect() then
 			local success, block = turtle.inspect()
 			if success and isOre(block) then
-				turtle.dig()
+				while turtle.detect() do
+					turtle.dig()
+				end
 				turtle.forward()
 				mineVein() -- Recursively mine in the new position
 				turtle.back()
@@ -182,6 +197,7 @@ function mineAndReturn(length)
 
 	-- Execute the dig down to depth function
 	digToDepth(tDepth)
+	mineVein()
 	-- Start strip mining
 	stripMine(length)
 
@@ -210,10 +226,16 @@ function mineAndReturn(length)
 			while direction ~= 1 do
 				turnRight()
 			end
+			while turtle.detect() do
+				turtle.dig()
+			end
 			moveForward()
 		elseif x < 0 then
 			while direction ~= 3 do
 				turnRight()
+			end
+			while turtle.detect() do
+				turtle.dig()
 			end
 			moveForward()
 		end
