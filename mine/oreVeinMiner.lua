@@ -226,7 +226,7 @@ function mineAndReturn(length)
 
 	-- Execute the dig down to depth function
 	digToDepth(tDepth)
-	mineVein()
+	-- mineVein()
 	-- Start strip mining
 	stripMine(length)
 
@@ -275,6 +275,7 @@ function digToDepth(depth)
 	for i = 1, depth, 1 do
 		turtle.digDown()
 		moveDown()
+		mineVein()
 	end
 end
 
