@@ -189,6 +189,9 @@ function mineAndReturn(length)
 			while direction ~= 2 do
 				turnRight()
 			end
+			while turtle.detect() do
+				turtle.dig()
+			end
 			moveForward()
 			-- moveBack()
 		elseif x > 0 then
@@ -205,5 +208,5 @@ function mineAndReturn(length)
 	end
 end
 
--- Execute the mining and returning function with a strip mine length of 20 blocks
-mineAndReturn(5)
+-- Execute the mining and returning function with a strip mine length
+mineAndReturn(10)
