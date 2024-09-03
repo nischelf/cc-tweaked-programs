@@ -1,3 +1,13 @@
+-- get Args
+io.write("Enter Mining depth: ")
+local tDepth = tonumber(io.read())
+io.write("Enter Tunnel length: ")
+local tLength = tonumber(io.read())
+
+if tLength <= 0 then
+	print("positive length")
+end
+
 -- List of ores to mine
 local ores = {
 	"minecraft:iron_ore",
@@ -170,15 +180,17 @@ function mineAndReturn(length)
 		direction = (direction - 1) % 4
 	end
 
+	-- Execute the dig down to depth function
+	digToDepth(tDepth)
 	-- Start strip mining
 	stripMine(length)
 
 	-- Returning to start point
 	while x ~= 0 or y ~= 0 or z ~= 0 do
 		print(x, y, z)
-		if y > 0 then
+		if y > 0 and x == 0 and z == 0 then
 			moveDown()
-		elseif y < 0 then
+		elseif y < 0 and x == 0 and z == 0 then
 			moveUp()
 		elseif z > 0 then
 			while direction ~= 2 do
@@ -208,5 +220,12 @@ function mineAndReturn(length)
 	end
 end
 
+function digToDepth(depth)
+	for i = 1, depth, 1 do
+		turtle.digDown()
+		moveDown()
+	end
+end
+
 -- Execute the mining and returning function with a strip mine length
-mineAndReturn(10)
+mineAndReturn(tLength)
