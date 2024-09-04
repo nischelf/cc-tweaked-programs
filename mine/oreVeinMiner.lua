@@ -1,3 +1,4 @@
+-- check if file exists
 local function fileExists(name)
 	local f, error = io.open(name, "r")
 	if error then
@@ -14,6 +15,7 @@ end
 local customOresFile = "/mine/customOres.lua"
 local customOres = nil
 -- imports
+-- check if customOres.lua file exists and import it
 if fileExists(customOresFile) then
 	local module_name = customOresFile:gsub("%.lua$", "")
 	customOres = require(module_name)
@@ -36,6 +38,36 @@ local tLength = tonumber(io.read())
 if tLength <= 0 then
 	print("positive length!")
 end
+
+-- check fuel
+function refuel()
+	for i = 1, 16, 1 do
+		turtle.select(i)
+		local is_fuel, reason = turtle.refuel(0)
+		if is_fuel then
+			turtle.refuel()
+		end
+		if turtle.getFuelLevel() >= (tDepth * 2 + tLength * 2 + 400) then
+			break
+		end
+	end
+end
+
+function checkFuel()
+	local level = turtle.getFuelLevel()
+	local neededFuel = (tDepth * 2 + tLength * 2 + 400) - level
+	if level <= neededFuel then
+		print("input more fuel")
+		print(neededFuel .. " Fule is needed")
+		print(neededFuel / 80 .. " Coal ores needed")
+		while turtle.getFuelLevel() <= neededFuel do
+			refuel()
+		end
+	end
+	print("Fuel Level:" .. turtle.getFuelLevel())
+end
+
+checkFuel()
 
 -- Base list of ores to mine
 local ores = {
